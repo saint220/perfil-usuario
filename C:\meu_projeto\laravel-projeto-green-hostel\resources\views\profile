@@ -1,0 +1,84 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-5">
+    <h2>Meu Perfil</h2>
+
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
+        @csrf
+
+        <div class="text-center mb-4">
+            <div style="position: relative; display: inline-block;">
+                <img id="preview" 
+                     src="{{ $user->profile_photo ? asset('storage/profile_photos/'.$user->profile_photo) : 'https://via.placeholder.com/150' }}" 
+                     class="rounded-circle" 
+                     width="150" height="150" 
+                     style="object-fit: cover;">
+                <label for="profile_photo" class="btn btn-sm btn-secondary" style="position:absolute; bottom:0; right:0;">
+                    Trocar
+                </label>
+            </div>
+            <input type="file" id="profile_photo" name="profile_photo" accept="image/*" class="d-none" onchange="previewImage(event)">
+        </div>
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Nome</label>
+            <input type="text" name="name" value="{{ old('name', $user->name) }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">E-mail</label>
+            <input type="email" name="email" value="{{ old('email', $user->email) }}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Nova Senha</label>
+            <input type="password" name="password" class="form-control">
+            <small class="form-text text-muted">Deixe em branco se não quiser alterar.</small>
+        </div>
+
+        <div class="mb-3">
+            <label for="password_confirmation" class="form-label">Confirmar Senha</label>
+            <input type="password" name="password_confirmation" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+    </form>
+</div>
+
+<script>
+function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        document.getElementById('preview').src = reader.result;
+    };
+    reader.readAsDataURL(event.target.files[0]);
+}
+</script>
+@endsection
++ 
+C:\meu_projeto\laravel-projeto-green-hostel\resources\views\profile\edit.blade.php
+
+
+
+
+
+
+@if(auth()->user()->profile_photo)
+    <form action="{{ route('profile.removePhoto') }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" 
+                onclick="return confirm('Tem certeza que deseja remover sua foto?')">
+            Remover imagem
+        </button>
+    </form>
+@endif
+C:\meu_projeto\laravel-projeto-green-hostel\resources\views\profile\profile.blade.php
+
+
+
